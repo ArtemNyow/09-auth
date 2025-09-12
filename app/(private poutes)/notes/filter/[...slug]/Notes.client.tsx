@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import toast, { Toaster } from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import css from './NotesPage.module.css';
-import { fetchNotes, NotesResponse } from '@/lib/api';
+import { fetchNotes, NotesResponse } from "@/lib/api/clientApi";
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import Loader from '@/components/Loader/Loader';

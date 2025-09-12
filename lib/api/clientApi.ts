@@ -1,5 +1,7 @@
+import { Note } from "@/types/note";
+import { User } from "@/types/user";
 import axios from "axios";
-import type { Note } from "../types/note";
+import { nextServer } from "./api";
 
 const BASE_URL = "https://notehub-public.goit.study/api/notes";
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
@@ -18,7 +20,7 @@ export const fetchNotes = async (
 ): Promise<NotesResponse> => {
   const queryParams: { page: number; perPage: number; tag?: string; search?: string } = { page, perPage };
   if (tag) queryParams.tag = tag;
-  if (search) queryParams.search = search; // додали пошук
+  if (search) queryParams.search = search; 
 
   const response = await axios.get<NotesResponse>(BASE_URL, {
     headers: { Authorization: `Bearer ${TOKEN}` },
@@ -80,3 +82,14 @@ export const fetchTags = async (): Promise<string[]> => {
 
   return ["All", ...Array.from(tagsSet)];
 };
+
+
+export type RegisterRequest = {
+  email: string;
+  password: string;
+};
+
+export const register = async (data:RegisterRequest ) => {
+    const res = await nextServer.post<User>("/auth/register", data);
+  return res.data;
+}
