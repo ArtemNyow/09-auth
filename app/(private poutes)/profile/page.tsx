@@ -1,16 +1,16 @@
-
+'use client'
 import css from './ProfilePage.module.css'
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/user';
-import { getServerMe } from '@/lib/api/serverApi';
+import { getMe } from '@/lib/api/clientApi';
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);
 
  useEffect(() => {
-    getServerMe()
+    getMe()
       .then((data) => setUser(data))
   }, []);
 
