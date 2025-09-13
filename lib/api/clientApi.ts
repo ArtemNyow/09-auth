@@ -42,7 +42,25 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   return response.data;
 };
 
+export interface NotesResponse {
+  notes: Note[];
+  totalPages: number;
+  perPage?: number;
+}
 
+export const fetchTags = async (): Promise<string[]> => {
+
+  const { data } = await nextServer.get<NotesResponse>('/notes', {
+    params: { page: 1, perPage: 100 },
+  });
+
+  const tagsSet = new Set<string>();
+  data.notes.forEach((note) => {
+    if (note.tag) tagsSet.add(note.tag);
+  });
+
+  return ['All', ...Array.from(tagsSet)];
+};
 
 export type AuthRequest  = {
   email: string;

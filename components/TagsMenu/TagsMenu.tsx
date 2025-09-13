@@ -1,24 +1,41 @@
-// TagsMenu.tsx
 'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import css from './TagsMenu.module.css';
-import { useState } from 'react';
+import { fetchTags } from '@/lib/api/clientApi';
 
-interface TagsMenuProps {
-  tags: string[];
-}
-
-export default function TagsMenu({ tags }: TagsMenuProps) {
+export default function TagsMenu() {
   const pathname = usePathname();
   const currentTag = pathname?.split('/')[3] || 'All'; 
 
   const [open, setOpen] = useState(false);
+  const [tags, setTags] = useState<string[]>(['All']); // початковий стан
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTags = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchTags();
+        setTags(data);
+      } catch (err) {
+        console.error('Failed to load tags', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTags();
+  }, []);
+
+  if (loading) return <div>Loading tags...</div>;
 
   return (
     <div className={css.menuContainer}>
       <button className={css.menuButton} onClick={() => setOpen(prev => !prev)}>
-        {currentTag === '' ? 'Notes ▾' : `${currentTag} ▾`}
+        {currentTag || 'Notes'} ▾
       </button>
       {open && (
         <ul className={css.menuList}>
@@ -27,7 +44,11 @@ export default function TagsMenu({ tags }: TagsMenuProps) {
               key={tag}
               className={`${css.menuItem} ${tag === currentTag ? css.menuItemActive : ''}`}
             >
-              <Link href={`/notes/filter/${tag}`} className={css.menuLink} onClick={() => setOpen(false)}>
+              <Link
+                href={`/notes/filter/${tag}`}
+                className={css.menuLink}
+                onClick={() => setOpen(false)}
+              >
                 {tag}
               </Link>
             </li>

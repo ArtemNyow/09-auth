@@ -46,5 +46,6 @@ export const fetchServerTags = async (): Promise<string[]> => {
     if (note.tag) tagsSet.add(note.tag);
   });
 
+
   return ['All', ...Array.from(tagsSet)];
 };
