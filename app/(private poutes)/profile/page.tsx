@@ -1,10 +1,19 @@
+'use client'
 import css from './ProfilePage.module.css'
 import Image from 'next/image';
 import Link from 'next/link';
 import { getServerMe } from '@/lib/api/serverApi';
+import { useEffect, useState } from 'react';
+import { User } from '@/types/user';
 
- const Profile = async () => {
-  const user = await getServerMe();
+export default function Profile() {
+  const [user, setUser] = useState<User | null>(null);
+
+ useEffect(() => {
+    getServerMe()
+      .then((data) => setUser(data))
+  }, []);
+
   
     return <main className={css.mainContent}>
   <div className={css.profileCard}>
@@ -38,4 +47,3 @@ import { getServerMe } from '@/lib/api/serverApi';
 </main>
 
 }
-export default Profile;
