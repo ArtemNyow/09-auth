@@ -1,4 +1,3 @@
-'use client'
 import { Metadata } from 'next';
 import css from '../components/Home/Home.module.css'
 

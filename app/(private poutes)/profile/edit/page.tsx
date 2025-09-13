@@ -7,33 +7,40 @@ import { getMe, updateMe } from '@/lib/api/clientApi';
 
 export default function EditProfile() {
   const router = useRouter();
-    const [username, setUserName] = useState('');
+  const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     getMe().then((user) => {
       setUserName(user.username ?? '');
       setEmail(user.email ?? '');
       setAvatar(user.avatar ?? '');
+      setLoading(false);
     });
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
-    
 
- const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await updateMe({ username });
+    try {
+      await updateMe({ username: username });
+      router.push('/profile');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleCancel = () => {
     router.back();
   };
 
- 
+  if (loading) return <div>Loading...</div>;
+
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
