@@ -5,13 +5,15 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import css from './TagsMenu.module.css';
 import { fetchTags } from '@/lib/api/clientApi';
+import { useAuthStore } from '@/lib/store/authStore';
 
 export default function TagsMenu() {
   const pathname = usePathname();
-  const currentTag = pathname?.split('/')[3] || 'All'; 
+  const currentTag = pathname?.split('/')[3] || 'All';
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const [open, setOpen] = useState(false);
-  const [tags, setTags] = useState<string[]>(['All']); // початковий стан
+  const [tags, setTags] = useState<string[]>(['All']);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,16 +32,17 @@ export default function TagsMenu() {
     loadTags();
   }, []);
 
+  if (!isAuthenticated) return null; 
   if (loading) return <div>Loading tags...</div>;
 
   return (
     <div className={css.menuContainer}>
-      <button className={css.menuButton} onClick={() => setOpen(prev => !prev)}>
+      <button className={css.menuButton} onClick={() => setOpen((prev) => !prev)}>
         {currentTag || 'Notes'} ▾
       </button>
       {open && (
         <ul className={css.menuList}>
-          {tags.map(tag => (
+          {tags.map((tag) => (
             <li
               key={tag}
               className={`${css.menuItem} ${tag === currentTag ? css.menuItemActive : ''}`}
