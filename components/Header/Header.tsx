@@ -1,11 +1,11 @@
 import Link from "next/link";
 import css from "./Header.module.css";
-import { fetchTags } from "@/lib/api/clientApi";
 import TagsMenu from "../TagsMenu/TagsMenu";
 import AuthNavigation from "../AuthNavigation/AuthNavigation";
+import { fetchServerTags } from "@/lib/api/serverApi";
 
 export default async function Header() {
-  const tags = await fetchTags();
+  const tags = await fetchServerTags();
 
   return (
     <header className={css.header}>
