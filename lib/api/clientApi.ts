@@ -84,12 +84,41 @@ export const fetchTags = async (): Promise<string[]> => {
 };
 
 
-export type RegisterRequest = {
+export type AuthRequest  = {
   email: string;
   password: string;
 };
 
-export const register = async (data:RegisterRequest ) => {
+export const register = async (data:AuthRequest  ):Promise<User> => {
     const res = await nextServer.post<User>("/auth/register", data);
   return res.data;
 }
+export const login = async (data:AuthRequest  ):Promise<User> => {
+    const res = await nextServer.post<User>("/auth/login", data);
+  return res.data;
+}
+export const logout = async ():Promise<void> => {
+    await nextServer.post("/auth/logout");
+}
+type CheckSession = {
+  success: boolean,
+}
+  
+export const checkSession = async () => {
+  const res = await nextServer.get<CheckSession>("/auth/session");
+  return res.data.success;
+};
+
+export const getMe = async () => {
+  const { data } = await nextServer.get<User>("/users/me")
+  return data;
+}
+export type UpdateUserRequest = {
+  username?: string;
+  avatar?: string;
+};
+
+export const updateMe = async (payload: UpdateUserRequest) => {
+  const res = await nextServer.patch<User>('/users/me', payload);
+  return res.data;
+};
