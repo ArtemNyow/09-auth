@@ -1,18 +1,17 @@
-'use client'
 import css from './ProfilePage.module.css'
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { User } from '@/types/user';
-import { getMe } from '@/lib/api/clientApi';
+import { Metadata } from 'next';
+import { getServerMe } from '@/lib/api/serverApi';
 
-export default function Profile() {
-  const [user, setUser] = useState<User | null>(null);
+export const metadata: Metadata = {
+  title: 'Profile Page',
+  description: 'User profile page',
+};
 
- useEffect(() => {
-    getMe()
-      .then((data) => setUser(data))
-  }, []);
+export default async function Profile() {
+
+  const user = await getServerMe();
 
   
     return <main className={css.mainContent}>

@@ -40,11 +40,11 @@ export default function SignUp() {
       <form className={css.form} onSubmit={handleSubmit}>
         <div className={css.formGroup}>
           <label htmlFor="email">Email</label>
-          <input id="email" type="email" className={css.input} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input id="email" type="email" name="email" className={css.input} value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className={css.formGroup}>
           <label htmlFor="password">Password</label>
-          <input id="password" type="password" className={css.input} value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input id="password" type="password" name="password" className={css.input} value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div className={css.actions}>
           <button type="submit" className={css.submitButton}>Register</button>

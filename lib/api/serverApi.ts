@@ -49,3 +49,36 @@ export const fetchServerTags = async (): Promise<string[]> => {
 
   return ['All', ...Array.from(tagsSet)];
 };
+
+
+export const fetchServerNoteById = async (id: string): Promise<Note> => {
+  const cookieStore = cookies();
+  const response = await nextServer.get<Note>(`/notes/${id}`,{
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return response.data;
+};
+
+
+export const fetchServerNotes = async (
+  tag: string = "",
+  page: number,
+  perPage: number = 12,
+  search: string = ""
+): Promise<NotesResponse> => {
+  const cookieStore = cookies();
+  const queryParams: { page: number; perPage: number; tag?: string; search?: string } = { page, perPage };
+  if (tag && tag !== "All") queryParams.tag = tag;
+  if (search) queryParams.search = search;
+
+  const response = await nextServer.get<NotesResponse>("/notes", {
+    params: queryParams,
+  headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  return response.data;
+};
